@@ -28,10 +28,41 @@
         }
     ]
 
+    function handleCheckTodo(id) {
+        todos = todos.map(todo => {
+            if(todo.id === id){
+                todo.done = !todo.done;
+            }
+            return todo;
+        })
+    }
+
+    let todoValue = '';
+    
+    function addTodoItem() {
+        if(todoValue) {
+            const newTodo = {
+                id:uuid(),
+                content:todoValue,
+                done:false,
+            }
+        todos = [...todos, newTodo];
+        todoValue = '';
+        }
+    }
+
+    function handleTodoInputKeyup(e) {
+        if(e.keyCode === 13) {
+            console.log(`todoValue:${e.target.value}`)
+
+            addTodoItem();
+        }
+    }
+
 </script>
 
 <div class="app">
-    <TodoHeader/>
+    <TodoHeader bind:todoValue = {todoValue} {handleTodoInputKeyup}/>
     <TodoInfo/>
-    <TodoList {todos}/> <!--여기에 넣기만 한다고 화면에 나오지 않음, 해당 컴포넌트에서 코드를 구현해야됨.-->
+    <TodoList {todos}{handleCheckTodo}/> <!--여기에 넣기만 한다고 화면에 나오지 않음, 해당 컴포넌트에서 코드를 구현해야됨.-->
 </div>
