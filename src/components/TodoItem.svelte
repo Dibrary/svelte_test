@@ -8,6 +8,7 @@
 </script>
 
 <input type="checkbox" bind:checked={todo.done} on:click={() => handleCheckTodo(todo.id)}/>
+
 {#if editMode === todo.id}
     <input type="text" 
         bind:value={todo.content} 

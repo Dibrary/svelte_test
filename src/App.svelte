@@ -2,9 +2,7 @@
     import TodoHeader from './components/TodoHeader.svelte';
     import TodoInfo from './components/TodoInfo.svelte';
     import TodoList from './components/TodoList.svelte';
-
     import {v4 as uuid} from 'uuid';
-
     let todos = [
         {
             id:1,
@@ -27,7 +25,6 @@
             done:false
         }
     ]
-
     function handleCheckTodo(id) {
         todos = todos.map(todo => {
             if(todo.id === id){
@@ -36,9 +33,7 @@
             return todo;
         })
     }
-
     let todoValue = '';
-
     function addTodoItem() {
         if(todoValue) {
             const newTodo = {
@@ -50,14 +45,27 @@
         todoValue = '';
         }
     }
-
     function handleTodoInputKeyup(e) {
         if(e.keyCode === 13) {
             editTodoItem(editTodo);
             // console.log(`todoValue:${e.target.value}`)
             // todoValue = e.target.value;
-
             // addTodoItem();
+        }
+    }
+    function handleRemoveTodo(id) {
+        todos = todos.filter(todo => todo.id !== id);
+    }
+    let editMode='';
+    function handleChangeEditMode(id) {
+        editMode=id;
+    }
+    function closeEditMode() {
+        editMode='';
+    }
+    function handleEditTodoItem(e, editTodo) {
+        if(e.key===13){
+            editTodoItem(editTodo);
         }
     }
     function editTodoItem(editTodo) {
@@ -70,34 +78,12 @@
         closeEditMode();
     }
 
-    function handleRemoveTodo(id) {
-        todos = todos.filter(todo => todo.id !== id);
-    }
-
-    let editMode='';
-
-    function handleChangeEditMode(id) {
-        editMode=id;
-    }
-    function closeEditMode() {
-        editMode='';
-    }
-
-    function handleEditTodoItem(editTodo) {
-        todos = todos.map(todo => {
-            if(todo.id === editTodo.id) {
-                todo.content = editTodo.content;
-            }
-            return todo;
-        });
-
-        closeEditMode();
-    }
+    $: todoCount = todos.length;
 
 </script>
 
 <div class="app">
     <TodoHeader {todoValue} {handleTodoInputKeyup}/>
-    <TodoInfo/>
+    <TodoInfo {todoCount}/>
     <TodoList {todos}{handleCheckTodo}{handleRemoveTodo}{editMode}{handleChangeEditMode}{handleEditTodoItem}/> <!--여기에 넣기만 한다고 화면에 나오지 않음, 해당 컴포넌트에서 코드를 구현해야됨.-->
 </div>
